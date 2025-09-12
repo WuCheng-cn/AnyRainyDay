@@ -99,7 +99,51 @@ rainyWindow.setPanning(true)   // 启用平移
 rainyWindow.setPostProcessing(false) // 禁用后处理
 ```
 
-### 完整示例
+
+### CDN使用方式
+
+如果你想通过CDN方式使用，可以直接引入UMD格式的文件：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>雨滴窗口效果 - CDN使用</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; }
+        #rain-container { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="rain-container"></div>
+    
+    <!-- 引入Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <!-- 引入any-rainy-day -->
+    <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
+    
+    <script>
+        // 等待页面加载完成
+        window.addEventListener('load', function() {
+            const container = document.getElementById('rain-container')
+            
+            // 创建雨滴效果实例
+            const rainyWindow = new RainyWindow(container, {
+                intensity: 0.5,
+                speed: 0.3,
+                lightning: true,
+                fps: 60
+            })
+            
+            // 加载背景图片
+            rainyWindow.loadImage('https://picsum.photos/1920/1080')
+        })
+    </script>
+</body>
+</html>
+```
+
+### 完整示例 (ES模块)
 
 ```html
 <!DOCTYPE html>
@@ -115,7 +159,7 @@ rainyWindow.setPostProcessing(false) // 禁用后处理
     <div id="rain-container"></div>
     
     <script type="module">
-        import { RainyWindow } from './dist/any-rainy-day.es.js'
+        import { RainyWindow } from './dist/index.mjs'
         
         const container = document.getElementById('rain-container')
         const rainyWindow = new RainyWindow(container, {

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDN测试 - any-rainy-day</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .container {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #555;
+        }
+        
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #222;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CDN引入测试</h1>
+    
+    <div class="status" id="status">正在加载...</div>
+    
+    <div class="container" id="test-container"></div>
+    
+    <div class="controls">
+        <button onclick="testIntensity()">测试强度</button>
+        <button onclick="testSpeed()">测试速度</button>
+        <button onclick="testColor()">测试颜色</button>
+        <button onclick="testDestroy()">销毁重建</button>
+    </div>
+
+    <!-- 引入Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <!-- 引入本地UMD构建文件进行测试 -->
+    <script src="./dist/index.min.js"></script>
+    
+    <script>
+        let rainy;
+        const statusEl = document.getElementById('status');
+        const container = document.getElementById('test-container');
+
+        function updateStatus(message, isError = false) {
+            statusEl.textContent = message;
+            statusEl.style.color = isError ? '#ff6666' : '#66ff66';
+        }
+
+        function initRainy() {
+            try {
+                if (typeof RainyWindow === 'undefined') {
+                    updateStatus('错误: RainyWindow未定义，请检查CDN引入', true);
+                    return;
+                }
+
+                if (typeof THREE === 'undefined') {
+                    updateStatus('错误: THREE未定义，请检查Three.js引入', true);
+                    return;
+                }
+
+                rainy = new RainyWindow({
+                    container: container,
+                    intensity: 0.5,
+                    speed: 1.0,
+                    dropSize: 2,
+                    opacity: 0.7,
+                    color: '#ffffff',
+                    interactive: true,
+                    autoResize: true
+                });
+
+                updateStatus('✅ 雨滴效果初始化成功！');
+                
+                // 加载测试图片
+                rainy.loadImage('https://picsum.photos/800/400').then(() => {
+                    updateStatus('✅ 背景图片加载成功！');
+                }).catch(err => {
+                    updateStatus('⚠️ 背景图片加载失败: ' + err.message);
+                });
+
+            } catch (error) {
+                updateStatus('❌ 初始化失败: ' + error.message, true);
+                console.error('初始化错误:', error);
+            }
+        }
+
+        function testIntensity() {
+            if (!rainy) return;
+            const intensities = [0.3, 0.5, 0.7, 0.9, 1.0];
+            const current = rainy.getCurrentIntensity ? rainy.getCurrentIntensity() : 0.5;
+            const next = intensities[Math.floor(Math.random() * intensities.length)];
+            rainy.setIntensity(next);
+            updateStatus(`强度设置为: ${next}`);
+        }
+
+        function testSpeed() {
+            if (!rainy) return;
+            const speeds = [0.5, 1.0, 1.5, 2.0, 3.0];
+            const next = speeds[Math.floor(Math.random() * speeds.length)];
+            rainy.setSpeed(next);
+            updateStatus(`速度设置为: ${next}`);
+        }
+
+        function testColor() {
+            if (!rainy) return;
+            const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb'];
+            const next = colors[Math.floor(Math.random() * colors.length)];
+            rainy.setColor(next);
+            updateStatus(`颜色设置为: ${next}`);
+        }
+
+        function testDestroy() {
+            if (rainy) {
+                rainy.destroy();
+                rainy = null;
+                updateStatus('已销毁，正在重建...');
+                setTimeout(initRainy, 1000);
+            }
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', initRainy);
+    </script>
+</body>
+</html>

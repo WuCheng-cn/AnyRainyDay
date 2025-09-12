@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>any-rainy-day CDN使用示例</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .info {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>any-rainy-day CDN使用示例</h1>
+        <p>通过CDN方式引入雨滴效果</p>
+    </div>
+    
+    <div class="container" id="rainy-container"></div>
+    
+    <div class="controls">
+        <button onclick="toggleIntensity()">切换强度</button>
+        <button onclick="changeColor()">切换颜色</button>
+        <button onclick="toggleSpeed()">切换速度</button>
+        <button onclick="reset()">重置</button>
+    </div>
+
+    <!-- 正确的CDN引入方式 -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
+    
+    <script>
+        let rainy;
+        let intensityLevel = 0.5;
+        let speedLevel = 1.0;
+        const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb'];
+        let colorIndex = 0;
+
+        // 初始化雨滴效果
+        function initRainy() {
+            const container = document.getElementById('rainy-container');
+            
+            rainy = new RainyWindow({
+                container: container,
+                intensity: intensityLevel,
+                speed: speedLevel,
+                dropSize: 2.5,
+                opacity: 0.7,
+                color: colors[colorIndex],
+                interactive: true,
+                autoResize: true
+            });
+        }
+
+        // 控制函数
+        function toggleIntensity() {
+            intensityLevel = intensityLevel === 0.5 ? 0.8 : intensityLevel === 0.8 ? 1.0 : 0.5;
+            rainy.setIntensity(intensityLevel);
+        }
+
+        function toggleSpeed() {
+            speedLevel = speedLevel === 1.0 ? 1.5 : speedLevel === 1.5 ? 2.0 : 1.0;
+            rainy.setSpeed(speedLevel);
+        }
+
+        function changeColor() {
+            colorIndex = (colorIndex + 1) % colors.length;
+            rainy.setColor(colors[colorIndex]);
+        }
+
+        function reset() {
+            intensityLevel = 0.5;
+            speedLevel = 1.0;
+            colorIndex = 0;
+            rainy.setIntensity(intensityLevel);
+            rainy.setSpeed(speedLevel);
+            rainy.setColor(colors[colorIndex]);
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', initRainy);
+    </script>
+</body>
+</html>

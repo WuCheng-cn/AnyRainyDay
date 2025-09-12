@@ -24,24 +24,27 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
       },
       // 库的全局变量名（在 UMD 格式中使用）
-      name: 'AnyRainyDay',
+      name: 'RainyWindow',
       // 输出的文件名格式
-      fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'mjs' : 'cjs'}`,
+      fileName: (format, entryName) => {
+        if (format === 'umd')
+          return `${entryName}.min.js`
+        return `${entryName}.${format === 'es' ? 'mjs' : 'cjs'}`
+      },
       // 指定输出格式，可以是 'es' | 'cjs' | 'umd' | 'iife' 的数组
-      formats: ['es', 'cjs'],
+      formats: ['es', 'cjs', 'umd'],
     },
     // 配置 Rollup 选项
     rollupOptions: {
       // 声明外部依赖，避免将它们打包进库中
-      external: ['vue', 'react'], // 例如排除 Vue 或 React
+      external: ['three'], // 将Three.js作为外部依赖
       // 全局变量映射（UMD 构建时使用）
       output: {
         globals: {
-          vue: 'Vue',
-          react: 'React',
+          three: 'THREE',
         },
-        // 保留模块结构，避免模块被拆分成chunk
-        preserveModules: true,
+        // 对于UMD格式不保留模块结构
+        preserveModules: false,
         // 修复路径引用问题
         paths: {
           '@': resolve(__dirname, 'src'),
