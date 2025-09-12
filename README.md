@@ -1,155 +1,260 @@
-# any-core
+# any-rainy-day 🌧️
 
-any-core 是一个基于装饰器语法的快速开发框架核心包，通过装饰器对实体类的属性进行标记配置，实现与组件的自动化集成。适用于快速构建表单、表格、搜索等常见 UI 组件，并提供增强的类型安全特性。
+any-rainy-day 是一个基于 Three.js 实现的雨滴窗口效果库，通过 WebGL 着色器技术创建逼真的雨滴落在窗户上的视觉效果。支持背景图片和视频，提供丰富的参数控制接口。
 
-## 主要功能
+## 主要功能 ✨
 
-- **装饰器支持**：提供多种装饰器用于标记属性配置，支持 TypeScript 泛型，包括：
-  - `@CustomField<T, P>`：自定义字段标记，支持泛型类型安全。
-  - `@FormField`：用于表单字段配置（支持输入、复选框等类型）。
-  - `@SearchField`：用于搜索字段配置。
-  - `@TableField`：用于表格字段配置。
+- **逼真雨滴效果**：基于 GLSL 着色器实现的高质量雨滴视觉效果
+- **背景支持**：支持图片和视频作为背景
+- **丰富参数控制**：提供 10+ 个可配置参数，实时调整效果
+- **性能优化**：支持 FPS 限制和性能调节
+- **TypeScript 支持**：完整的类型定义和类型安全
+- **零依赖**：除 Three.js 外无其他依赖
 
-- **数据模型支持**：提供基础模型类（如 `AnyBaseModel`）和泛型字典模型类（如 `AnyDictionaryArrayModel<T, P>`），便于构建结构化数据。
+## 参数配置 🎛️
 
-- **辅助工具类**：包含日期处理、文件操作、数据转换、验证器等实用工具。
+| 参数 | 描述 | 范围 | 默认值 |
+|------|------|------|--------|
+| intensity | 雨滴强度 | 0-1 | 0.4 |
+| speed | 雨滴速度 | 0-10 | 0.25 |
+| brightness | 亮度调节 | 0-1 | 0.8 |
+| normal | 法线强度 | 0-3 | 0.5 |
+| zoom | 缩放比例 | 0.1-3 | 2.61 |
+| blurIntensity | 模糊强度 | 0-10 | 0.5 |
+| blurIterations | 模糊迭代次数 | 1-64 | 16 |
+| panning | 平移效果开关 | boolean | false |
+| postProcessing | 后处理开关 | boolean | true |
+| lightning | 闪电效果开关 | boolean | false |
+| textureFill | 纹理填充开关 | boolean | true |
+| fps | 帧率设置 | 15-120 | 30 |
 
-- **增强的类型安全**：通过 ClassFieldNames、ClassMethodNames 等类型工具，提供编译时类型检查和自动补全功能。
-
-- **类型工具系统**：提供强大的类型工具，确保 API 使用的类型安全。
-
-## 安装
+## 安装 📦
 
 使用 pnpm 安装：
 
 ```bash
-pnpm install any-core
+pnpm install any-rainy-day
 ```
 
-## 使用示例
+或者使用 npm：
 
-### 使用 `@CustomField` 构建类型安全的字典字段
+```bash
+npm install any-rainy-day
+```
 
-```ts
-import { AnyBaseModel } from 'any-core'
-import { CustomField } from 'any-core/decorator'
-import { AnyDictionaryHelper } from 'any-core/helper'
+## 使用示例 🚀
 
-// 使用枚举定义值类型
-enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user'
+### 基础用法
+
+```typescript
+import { RainyWindow } from 'any-rainy-day'
+
+// 创建雨滴效果
+const container = document.getElementById('rain-container')
+const rainyWindow = new RainyWindow(container)
+
+// 加载背景图片
+await rainyWindow.loadImage('path/to/image.jpg')
+
+// 调整参数
+rainyWindow.setIntensity(0.6)
+rainyWindow.setSpeed(0.5)
+```
+
+### 使用配置选项
+
+```typescript
+import { RainyWindow } from 'any-rainy-day'
+
+const container = document.getElementById('rain-container')
+const rainyWindow = new RainyWindow(container, {
+  intensity: 0.5,
+  speed: 0.3,
+  brightness: 0.9,
+  normal: 1.2,
+  zoom: 2.0,
+  blurIntensity: 0.3,
+  blurIterations: 8,
+  postProcessing: true,
+  lightning: true,
+  fps: 60
+})
+
+// 加载背景视频
+await rainyWindow.loadVideo('path/to/video.mp4')
+```
+
+### 动态控制效果
+
+```typescript
+// 实时调整参数
+const gui = new dat.GUI()
+gui.add({ intensity: 0.4 }, 'intensity', 0, 1).onChange((value) => {
+  rainyWindow.setIntensity(value)
+})
+
+// 切换效果
+rainyWindow.setLightning(true) // 启用闪电
+rainyWindow.setPanning(true)   // 启用平移
+rainyWindow.setPostProcessing(false) // 禁用后处理
+```
+
+### 完整示例
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>雨滴窗口效果</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; }
+        #rain-container { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="rain-container"></div>
+    
+    <script type="module">
+        import { RainyWindow } from './dist/any-rainy-day.es.js'
+        
+        const container = document.getElementById('rain-container')
+        const rainyWindow = new RainyWindow(container, {
+            intensity: 0.5,
+            speed: 0.3,
+            lightning: true,
+            fps: 60
+        })
+        
+        // 加载背景
+        await rainyWindow.loadImage('https://picsum.photos/1920/1080')
+    </script>
+</body>
+</html>
+```
+
+## API 文档 📚
+
+### RainyWindow 类
+
+#### 构造函数
+
+```typescript
+new RainyWindow(container: HTMLElement, options?: RainyWindowOptions)
+```
+
+#### 方法
+
+##### 参数控制
+- `setIntensity(value: number)` - 设置雨滴强度
+- `setSpeed(value: number)` - 设置雨滴速度
+- `setBrightness(value: number)` - 设置亮度
+- `setNormal(value: number)` - 设置法线强度
+- `setZoom(value: number)` - 设置缩放比例
+- `setBlurIntensity(value: number)` - 设置模糊强度
+- `setBlurIterations(value: number)` - 设置模糊迭代次数
+- `setPanning(value: boolean)` - 启用/禁用平移效果
+- `setPostProcessing(value: boolean)` - 启用/禁用后处理
+- `setLightning(value: boolean)` - 启用/禁用闪电效果
+- `setTextureFill(value: boolean)` - 启用/禁用纹理填充
+- `setFps(value: number)` - 设置帧率
+
+##### 资源管理
+- `loadImage(url: string): Promise<void>` - 加载背景图片
+- `loadVideo(url: string): Promise<void>` - 加载背景视频
+- `destroy(): void` - 销毁实例并清理资源
+- `pause(): void` - 暂停渲染
+- `resume(): void` - 恢复渲染
+
+### 类型定义
+
+```typescript
+interface RainyWindowOptions {
+  intensity?: number
+  speed?: number
+  brightness?: number
+  normal?: number
+  zoom?: number
+  blurIntensity?: number
+  blurIterations?: number
+  panning?: boolean
+  postProcessing?: boolean
+  lightning?: boolean
+  textureFill?: boolean
+  fps?: number
 }
 
-interface RolePayload {
-  permissions: string[]
-}
-
-// 使用枚举创建字典数组
-const roleDictArray = AnyDictionaryHelper.createDictionaryArray([
-  { label: '管理员', value: UserRole.ADMIN, payload: { permissions: ['read', 'write', 'admin'] } },
-  { label: '普通用户', value: UserRole.USER, payload: { permissions: ['read', 'write'] } }
-])
-
-// 使用as const创建字典数组
-const enabledDictArray = AnyDictionaryHelper.createDictionaryArray([
-  { label: '是', value: true },
-  { label: '否', value: false }
-] as const)
-
-class User extends AnyBaseModel {
-  @CustomField('用户角色', roleDictArray)
-  role: UserRole = UserRole.USER
-
-  @CustomField<boolean>('是否启用', enabledDictArray)
-  enabled: boolean = true
-}
-
-// 使用类型安全的方法获取字典配置
-const user = new User()
-// 类型安全地获取自定义字段的字典数组
-const roleDict = user.getFieldDictionaryArray('role')
-if (roleDict) {
-  // 类型安全地获取字典项
-  const adminRole = roleDict.getDictByValue(UserRole.ADMIN)
-  // 正确访问payload属性，TypeScript会进行类型检查
-  console.log(adminRole?.payload?.permissions) // 输出: ['read', 'write', 'admin']
+interface RainyWindowControls {
+  setIntensity: (value: number) => void
+  setSpeed: (value: number) => void
+  setBrightness: (value: number) => void
+  setNormal: (value: number) => void
+  setZoom: (value: number) => void
+  setBlurIntensity: (value: number) => void
+  setBlurIterations: (value: number) => void
+  setPanning: (value: boolean) => void
+  setPostProcessing: (value: boolean) => void
+  setLightning: (value: boolean) => void
+  setTextureFill: (value: boolean) => void
+  setFps: (value: number) => void
+  loadImage: (url: string) => Promise<void>
+  loadVideo: (url: string) => Promise<void>
+  destroy: () => void
+  pause: () => void
+  resume: () => void
 }
 ```
 
-### 使用 `@FormField` 构建表单字段
+## 开发 🛠️
 
-```ts
-import { AnyBaseModel } from 'any-core'
-import { FormField } from 'any-core/decorator'
-import { EFormItemType } from 'any-core/enum'
+### 安装依赖
 
-class Product extends AnyBaseModel {
-  @FormField({
-    formType: EFormItemType.INPUT,
-    label: '产品名称',
-    required: true,
-    placeholder: '请输入产品名称'
-  })
-  name: string
-
-  @FormField({
-    formType: EFormItemType.NUMBER,
-    label: '产品价格',
-    required: true,
-    placeholder: '请输入产品价格',
-    rules: [{ required: true, message: '请输入产品价格' }]
-  })
-  price: number
-}
-
-// 使用类型安全的方法获取表单配置
-const product = new Product()
-// getFormFieldList返回类型安全的字段名称数组
-const formFields = product.getFormFieldList()
-// getFormFieldConfigObj可以接收类型安全的字段名称参数
-const formConfig = product.getFormFieldConfigObj('name', 'price')
+```bash
+pnpm install
 ```
 
-### 使用 `@TableField` 构建表格字段
+### 开发模式
 
-```ts
-import { AnyBaseModel } from 'any-core'
-import { TableField } from 'any-core/decorator'
-import { EDateFormatType } from 'any-core/enum'
-
-class Order extends AnyBaseModel {
-  @TableField({ label: '订单编号', width: 150, fixed: 'left' })
-  orderNo: string
-
-  @TableField({ label: '订单金额', width: 100, sorter: true })
-  amount: number
-
-  @TableField({
-    label: '创建时间',
-    width: 180,
-    sorter: true,
-    dateFormat: EDateFormatType.YYYY_MM_DD_HH_MM_SS
-  })
-  createTime: string
-}
-
-// 使用类型安全的方法获取表格配置
-const order = new Order()
-// 获取表格字段列表
-const tableFields = order.getTableFieldList()
-// 类型安全地获取字段标签
-const orderNoLabel = order.getTableFieldLabel('orderNo')
+```bash
+pnpm dev
 ```
 
-## 文档
+### 构建
 
-详细文档请查看 [项目文档](https://wucheng-cn.github.io/AnyCore/)。
+```bash
+pnpm build
+```
 
-## 贡献
+### 运行示例
 
-欢迎提交 Pull Request 或 Issue。请遵循项目代码规范并编写清晰的提交信息。
+```bash
+pnpm example
+```
 
-## 许可证
+## 性能优化 💡
 
-该项目基于 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
+- **FPS 限制**：通过 `setFps()` 方法限制渲染帧率
+- **模糊优化**：调整 `blurIterations` 减少计算量
+- **纹理优化**：根据设备性能调整纹理质量
+- **后处理开关**：在低性能设备上可关闭后处理效果
+
+## 浏览器兼容性 🌐
+
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
+
+需要支持 WebGL 的浏览器环境。
+
+## 许可证 📄
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 贡献 🤝
+
+欢迎提交 Issue 和 Pull Request！
+
+## 致谢 👏
+
+- [Three.js](https://threejs.org/) - 3D 图形库
+- 灵感来源于真实雨滴效果的物理模拟
