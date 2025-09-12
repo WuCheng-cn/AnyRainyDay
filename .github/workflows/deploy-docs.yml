@@ -24,14 +24,11 @@ permissions:
 # 并发控制
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  # 构建和部署作业
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # 构建作业
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
@@ -43,6 +40,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
           
       # 使用npm全局安装pnpm - 这种方式更可靠
       - name: 安装pnpm
@@ -59,7 +57,15 @@ jobs:
         with:
           # 上传VitePress构建后的文档目录
           path: 'docs/.vitepress/dist'
-          
+
+  # 部署作业
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: 部署到GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
