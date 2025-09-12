@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RainyWindow 使用示例</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 100;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        input[type="range"] {
+            width: 200px;
+        }
+        
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <div class="controls">
+        <h3>雨滴效果控制</h3>
+        
+        <div class="control-group">
+            <label>强度: <span id="intensity-value">0.4</span></label>
+            <input type="range" id="intensity" min="0" max="1" step="0.01" value="0.4">
+        </div>
+        
+        <div class="control-group">
+            <label>速度: <span id="speed-value">0.25</span></label>
+            <input type="range" id="speed" min="0" max="10" step="0.01" value="0.25">
+        </div>
+        
+        <div class="control-group">
+            <label>亮度: <span id="brightness-value">0.8</span></label>
+            <input type="range" id="brightness" min="0" max="1" step="0.01" value="0.8">
+        </div>
+        
+        <div class="control-group">
+            <label>缩放: <span id="zoom-value">2.61</span></label>
+            <input type="range" id="zoom" min="0.1" max="3" step="0.01" value="2.61">
+        </div>
+        
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="lightning"> 闪电效果
+            </label>
+        </div>
+        
+        <div class="control-group">
+            <label>
+                <input type="checkbox" id="panning"> 平移效果
+            </label>
+        </div>
+        
+        <div class="control-group">
+            <button onclick="loadSampleImage()">加载示例图片</button>
+            <button onclick="pauseResume()">暂停/恢复</button>
+        </div>
+    </div>
+
+    <!-- 引入构建后的库 -->
+    <script type="module">
+        import { RainyWindow } from '../dist/index.mjs';
+
+        // 创建雨滴效果实例
+        const container = document.getElementById('container');
+        const rainyWindow = new RainyWindow(container, {
+            intensity: 0.4,
+            speed: 0.25,
+            brightness: 0.8,
+            zoom: 2.61
+        });
+
+        // 绑定控制事件
+        document.getElementById('intensity').addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            rainyWindow.setIntensity(value);
+            document.getElementById('intensity-value').textContent = value.toFixed(2);
+        });
+
+        document.getElementById('speed').addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            rainyWindow.setSpeed(value);
+            document.getElementById('speed-value').textContent = value.toFixed(2);
+        });
+
+        document.getElementById('brightness').addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            rainyWindow.setBrightness(value);
+            document.getElementById('brightness-value').textContent = value.toFixed(2);
+        });
+
+        document.getElementById('zoom').addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            rainyWindow.setZoom(value);
+            document.getElementById('zoom-value').textContent = value.toFixed(2);
+        });
+
+        document.getElementById('lightning').addEventListener('change', (e) => {
+            rainyWindow.setLightning(e.target.checked);
+        });
+
+        document.getElementById('panning').addEventListener('change', (e) => {
+            rainyWindow.setPanning(e.target.checked);
+        });
+
+        // 全局函数供HTML调用
+        window.loadSampleImage = () => {
+            rainyWindow.loadImage('https://picsum.photos/1920/1080')
+                .then(() => console.log('图片加载成功'))
+                .catch(err => console.error('图片加载失败:', err));
+        };
+
+        let isPaused = false;
+        window.pauseResume = () => {
+            if (isPaused) {
+                rainyWindow.resume();
+                isPaused = false;
+            } else {
+                rainyWindow.pause();
+                isPaused = true;
+            }
+        };
+
+        // 加载默认背景
+        rainyWindow.loadImage('https://picsum.photos/1920/1080')
+            .catch(err => console.error('默认图片加载失败:', err));
+    </script>
+</body>
+</html>
