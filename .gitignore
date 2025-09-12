@@ -1,0 +1,11 @@
+# 编译输出
+lib
+dist
+!docs/.vitepress/dist
+
+# 依赖
+node_modules
+
+# 缓存
+.eslintcache
+docs/.vitepress/cache

@@ -1,0 +1,1 @@
+import{_ as i,c as a,o as l,af as n}from"./chunks/framework.Ds3YjYpd.js";const E=JSON.parse('{"title":"模型API","description":"","frontmatter":{},"headers":[],"relativePath":"api/models.md","filePath":"api/models.md"}'),h={name:"api/models.md"};function t(e,s,k,p,r,d){return l(),a("div",null,s[0]||(s[0]=[n("",83)]))}const y=i(h,[["render",t]]);export{E as __pageData,y as default};

@@ -1,0 +1,1 @@
+import{_ as a,c as i,o as n,af as e}from"./chunks/framework.Ds3YjYpd.js";const k=JSON.parse('{"title":"AnyCore 文档","description":"","frontmatter":{},"headers":[],"relativePath":"README.md","filePath":"README.md"}'),l={name:"README.md"};function p(t,s,h,r,d,c){return n(),i("div",null,s[0]||(s[0]=[e("",20)]))}const g=a(l,[["render",p]]);export{k as __pageData,g as default};

@@ -1,0 +1,4 @@
+1.项目采用typescript编写
+2.项目测试基于vitest
+3.项目打包基于vite的库构建
+4.类型工具在types目录下的TypeUtils中，新加的类型工具都要在该文件中导出
