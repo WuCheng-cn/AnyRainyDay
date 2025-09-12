@@ -1,65 +1,68 @@
-# AnyCore 文档
+# 文档项目说明
 
-欢迎使用AnyCore框架文档。本文档将帮助您了解AnyCore框架的核心概念、API和使用方法。
-
-## 本地预览文档
-
-要在本地预览文档，请按照以下步骤操作：
-
-1. 确保您已安装Node.js和pnpm
-
-2. 安装项目依赖：
-
-```bash
-# 在项目根目录执行
-pnpm install
-```
-
-3. 启动开发服务器：
-
-```bash
-# 在项目根目录执行
-npx vitepress dev docs
-```
-
-4. 打开浏览器访问 http://localhost:5173/ 查看文档
-
-## 构建文档
-
-要构建文档以便部署，请执行以下命令：
-
-```bash
-# 在项目根目录执行
-npx vitepress build docs
-```
-
-构建后的文档将位于 `docs/.vitepress/dist` 目录中。
+这是 any-rainy-day 雨滴窗口效果库的文档项目，使用 VitePress 构建。
 
 ## 项目结构
 
-文档项目的主要结构如下：
-
 ```
 docs/
-├── .vitepress/          # VitePress配置目录
-│   ├── config.ts        # 站点配置文件
-│   └── cache/           # 缓存目录
-├── guide/               # 指南文档
-│   └── getting-started.md # 快速开始指南
-├── api/                 # API文档
-│   ├── index.md         # API概览
-│   ├── decorators.md    # 装饰器API
-│   ├── helpers.md       # 辅助函数API
-│   └── models.md        # 模型API
-├── examples/            # 使用示例
-│   └── basic-usage.md   # 基础使用示例
-├── index.md             # 首页
-└── README.md            # 文档说明
+├── .vitepress/          # VitePress 配置文件
+│   ├── config.ts      # 站点配置
+│   └── theme/          # 自定义主题
+├── api/                # API 文档
+├── examples/           # 使用示例
+├── guide/              # 使用指南
+├── index.md            # 首页
+└── README.md           # 本文件
 ```
+
+## 本地开发
+
+### 安装依赖
+
+```bash
+npm install
+```
+
+### 启动开发服务器
+
+```bash
+npm run docs:dev
+```
+
+访问 http://localhost:3000 查看文档。
+
+### 构建文档
+
+```bash
+npm run docs:build
+```
+
+构建后的文件将输出到 `dist/docs/` 目录。
+
+### 预览构建结果
+
+```bash
+npm run docs:preview
+```
+
+## 文档编写规范
+
+1. 使用 Markdown 语法编写
+2. 代码示例使用 ``` 代码块
+3. 保持中英文空格规范
+4. 重要概念使用 **加粗**
+5. 代码变量使用 `反引号`
+
+## 更新日志
+
+- 2024-01-XX: 初始版本，创建 any-rainy-day 项目文档
+- 2024-01-XX: 更新为雨滴效果库相关文档
 
 ## 贡献指南
 
-如果您发现文档中的错误或有改进建议，请提交issue或PR。我们欢迎社区贡献来完善文档。
+欢迎提交 Issue 和 Pull Request 来改进文档。
 
-## 联系我们
-如有任何问题或建议，请随时联系我们。
+## 许可证
+
+MIT License
