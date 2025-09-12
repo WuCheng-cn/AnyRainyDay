@@ -74,7 +74,7 @@ onMounted(() => {
   // 异步加载 Three.js 和 any-rainy-day
   Promise.all([
     loadScript('https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js'),
-    loadScript('https://cdn.jsdelivr.net/npm/any-rainy-day@latest/dist/any-rainy-day.min.js')
+    loadScript('https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs')
   ]).then(() => {
     // 确保库已加载
     if (typeof window.RainyWindow === 'undefined') {

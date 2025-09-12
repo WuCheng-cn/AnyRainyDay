@@ -24,7 +24,7 @@ pnpm add any-rainy-day
 <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
 
 <!-- 引入 any-rainy-day -->
-<script src="https://cdn.jsdelivr.net/npm/any-rainy-day/dist/any-rainy-day.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
 ```
 
 ## 基础概念
@@ -86,7 +86,7 @@ any-rainy-day 是一个基于 Three.js 的逼真雨滴窗口特效库，主要�
   <!-- 引入 Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
   <!-- 引入 any-rainy-day -->
-  <script src="https://cdn.jsdelivr.net/npm/any-rainy-day/dist/any-rainy-day.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script src="main.js"></script>
 </body>
 </html>
@@ -296,7 +296,7 @@ rainy.on('resize', (width: number, height: number) => {
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/any-rainy-day/dist/any-rainy-day.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     let rainy
     

@@ -76,7 +76,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/any-rainy-day/dist/any-rainy-day.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     let rainy
     let isRaining = true
@@ -237,7 +237,7 @@ function createResponsiveRain() {
   <div id="rainy-container"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/any-rainy-day/dist/any-rainy-day.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     const themes = {
       default: {
@@ -612,7 +612,7 @@ const rainy = new CustomRainyWindow({
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/any-rainy-day/dist/any-rainy-day.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const rainy = new RainyWindow({

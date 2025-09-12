@@ -107,7 +107,7 @@ function loadRainScripts(): Promise<void> {
 
     const scripts = [
       'https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js',
-      'https://cdn.jsdelivr.net/npm/any-rainy-day@latest/dist/any-rainy-day.min.js',
+      'https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs',
     ]
 
     let loaded = 0
