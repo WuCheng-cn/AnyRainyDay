@@ -1,36 +1,58 @@
-import DefaultTheme from 'vitepress/theme'
+import type { EnhanceAppContext } from 'vitepress'
+import Theme from 'vitepress/theme'
+// import { h } from 'vue'
+import './style.css'
+
+// 扩展全局window类型
+declare global {
+  interface Window {
+    rainScriptsLoaded?: boolean
+    RainyWindow?: any
+  }
+}
 
 export default {
-  ...DefaultTheme,
-  enhanceApp({ _app, router, _siteData }) {
-    // 添加雨滴演示功能
-    if (typeof window !== 'undefined') {
-      window.addEventListener('load', () => {
-        // 只在首页添加演示
-        if (window.location.pathname.includes('/any-rainy-day/') || window.location.pathname === '/') {
-          addRainDemo()
-        }
-      })
+  ...Theme,
+  // Layout() {
+  //   return h(Theme.Layout, null, {
+  //     // 可以在这里添加额外的插槽内容
+  //   })
+  // },
+  enhanceApp({ router }: EnhanceAppContext) {
+    // 添加雨滴演示功能 - 只在客户端执行
+    if (typeof window === 'undefined')
+      return
 
-      // 监听路由变化
-      router.onAfterRouteChanged = (to) => {
-        if (to.path === '/' || to.path === '/any-rainy-day/') {
-          setTimeout(addRainDemo, 100)
-        }
+    window.addEventListener('load', () => {
+      // 只在首页添加演示
+      if (window.location.pathname.includes('/any-rainy-day/') || window.location.pathname === '/') {
+        addRainDemo()
+      }
+    })
+
+    // 监听路由变化
+    router.onAfterRouteChange = (to: string) => {
+      if (to === '/' || to === '/any-rainy-day/') {
+        setTimeout(addRainDemo, 100)
       }
     }
   },
 }
 
-function addRainDemo() {
+/**
+ * 添加雨滴演示到首页
+ */
+function addRainDemo(): void {
   // 检查是否已经添加
-  if (document.querySelector('.rain-demo-container'))
+  if (document.querySelector('.rain-demo-container')) {
     return
+  }
 
   // 查找 hero 区域的 logo
   const heroImage = document.querySelector('.VPHero .VPImage')
-  if (!heroImage || !heroImage.parentElement)
+  if (!heroImage || !heroImage.parentElement) {
     return
+  }
 
   const container = heroImage.parentElement
 
@@ -66,13 +88,16 @@ function addRainDemo() {
   // 加载脚本
   loadRainScripts().then(() => {
     initRainDemo()
-  }).catch((error) => {
+  }).catch((error: Error) => {
     console.error('Failed to load demo:', error)
     demoContainer.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 14px;">加载失败</div>'
   })
 }
 
-function loadRainScripts() {
+/**
+ * 加载雨滴效果所需的脚本
+ */
+function loadRainScripts(): Promise<void> {
   return new Promise((resolve, reject) => {
     // 检查是否已加载
     if (window.rainScriptsLoaded) {
@@ -87,7 +112,7 @@ function loadRainScripts() {
 
     let loaded = 0
 
-    scripts.forEach((src) => {
+    scripts.forEach((src: string) => {
       const script = document.createElement('script')
       script.onload = () => {
         loaded++
@@ -96,24 +121,28 @@ function loadRainScripts() {
           resolve()
         }
       }
-      script.onerror = reject
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`))
       script.src = src
       document.head.appendChild(script)
     })
   })
 }
 
-function initRainDemo() {
-  if (typeof RainyWindow === 'undefined')
+/**
+ * 初始化雨滴演示
+ */
+function initRainDemo(): void {
+  if (typeof window.RainyWindow === 'undefined') {
     return
+  }
 
   const container = document.getElementById('hero-demo')
-  if (!container)
+  if (!container) {
     return
+  }
 
   // 创建雨滴效果实例
-  // eslint-disable-next-line no-undef
-  const rainy = new RainyWindow({
+  const rainy = new window.RainyWindow({
     container,
     intensity: 0.5,
     speed: 1.2,
@@ -128,19 +157,23 @@ function initRainDemo() {
   const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb']
   let colorIndex = 0
 
-  document.getElementById('demo-intensity').addEventListener('click', () => {
+  const intensityBtn = document.getElementById('demo-intensity')
+  const colorBtn = document.getElementById('demo-color')
+  const resetBtn = document.getElementById('demo-reset')
+
+  intensityBtn?.addEventListener('click', () => {
     const intensities = [0.3, 0.5, 0.7, 0.9, 1.0]
     const current = intensities.indexOf(rainy.getCurrentIntensity())
     const next = (current + 1) % intensities.length
     rainy.setIntensity(intensities[next])
   })
 
-  document.getElementById('demo-color').addEventListener('click', () => {
+  colorBtn?.addEventListener('click', () => {
     colorIndex = (colorIndex + 1) % colors.length
     rainy.setColor(colors[colorIndex])
   })
 
-  document.getElementById('demo-reset').addEventListener('click', () => {
+  resetBtn?.addEventListener('click', () => {
     rainy.setIntensity(0.5)
     rainy.setSpeed(1.2)
     rainy.setColor('#ffffff')

@@ -6,7 +6,7 @@ hero:
   text: 雨滴窗口效果库
   tagline: 基于 Three.js 的逼真雨滴窗口特效，为您的网页增添诗意氛围
   image:
-    src: /logo.png
+    src: /logo.jpg
     alt: any-rainy-day
   actions:
     - theme: brand
@@ -49,9 +49,13 @@ features:
   </div>
 </div>
 
-<script>
-// 等待页面加载完成
-window.addEventListener('load', () => {
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  // 确保在浏览器环境中运行
+  if (typeof window === 'undefined') return
+
   // 创建演示容器
   const container = document.getElementById('hero-demo')
   if (!container) return
@@ -73,13 +77,13 @@ window.addEventListener('load', () => {
     loadScript('https://cdn.jsdelivr.net/npm/any-rainy-day@latest/dist/any-rainy-day.min.js')
   ]).then(() => {
     // 确保库已加载
-    if (typeof RainyWindow === 'undefined') {
+    if (typeof window.RainyWindow === 'undefined') {
       container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 16px;">加载中...</div>'
       return
     }
 
     // 创建雨滴效果实例
-    const rainy = new RainyWindow({
+    const rainy = new window.RainyWindow({
       container: container,
       intensity: 0.5,
       speed: 1.2,
@@ -94,19 +98,19 @@ window.addEventListener('load', () => {
     const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb']
     let colorIndex = 0
 
-    document.getElementById('demo-intensity').addEventListener('click', () => {
+    document.getElementById('demo-intensity')?.addEventListener('click', () => {
       const intensities = [0.3, 0.5, 0.7, 0.9, 1.0]
       const current = intensities.indexOf(rainy.getCurrentIntensity())
       const next = (current + 1) % intensities.length
       rainy.setIntensity(intensities[next])
     })
 
-    document.getElementById('demo-color').addEventListener('click', () => {
+    document.getElementById('demo-color')?.addEventListener('click', () => {
       colorIndex = (colorIndex + 1) % colors.length
       rainy.setColor(colors[colorIndex])
     })
 
-    document.getElementById('demo-reset').addEventListener('click', () => {
+    document.getElementById('demo-reset')?.addEventListener('click', () => {
       rainy.setIntensity(0.5)
       rainy.setSpeed(1.2)
       rainy.setColor('#ffffff')

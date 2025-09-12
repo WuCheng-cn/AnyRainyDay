@@ -4,6 +4,7 @@ export default defineConfig({
   title: 'any-rainy-day',
   description: '基于 Three.js 的逼真雨滴窗口效果库',
   base: '/any-rainy-day/',
+  ignoreDeadLinks: true,
 
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
@@ -12,7 +13,7 @@ export default defineConfig({
   ],
 
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/logo.jpg',
 
     nav: [
       { text: '首页', link: '/' },
@@ -21,7 +22,7 @@ export default defineConfig({
       { text: '示例', link: '/examples/basic-usage' },
       {
         text: 'GitHub',
-        link: 'https://github.com/your-username/any-rainy-day',
+        link: 'https://github.com/WuCheng-cn/AnyRainyDay',
       },
     ],
 
@@ -53,17 +54,12 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/your-username/any-rainy-day' },
+      { icon: 'github', link: 'https://github.com/WuCheng-cn/AnyRainyDay' },
     ],
 
     footer: {
       message: '基于 MIT 许可证开源',
-      copyright: 'Copyright © 2024 any-rainy-day 项目团队',
-    },
-
-    editLink: {
-      pattern: 'https://github.com/your-username/any-rainy-day/edit/main/docs/:path',
-      text: '在 GitHub 上编辑此页',
+      copyright: 'Copyright © 2025 WuCheng-cn',
     },
 
     search: {
@@ -89,13 +85,4 @@ export default defineConfig({
     },
   },
 
-  vite: {
-    server: {
-      port: 3000,
-      host: true,
-    },
-    build: {
-      outDir: '../dist/docs',
-    },
-  },
 })
