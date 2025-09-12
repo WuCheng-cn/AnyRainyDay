@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'any-rainy-day',
   description: '基于 Three.js 的逼真雨滴窗口效果库',
-  base: '/any-rainy-day/',
+  base: '/AnyRainyDay/',
   ignoreDeadLinks: true,
 
   head: [
