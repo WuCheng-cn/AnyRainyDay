@@ -153,6 +153,7 @@ function initRainDemo(): void {
     interactive: true,
     autoResize: true,
   })
+  rainy.loadImage('https://picsum.photos/1920/1080')
 
   // 演示控制按钮
   const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb']
