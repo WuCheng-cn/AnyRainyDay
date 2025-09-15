@@ -50,7 +50,7 @@ npm install @arayui/rainy-day
 
 ```typescript
 import { RainyWindow } from '@arayui/rainy-day'
-```
+
 // 创建雨滴效果
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container)
@@ -67,7 +67,7 @@ rainyWindow.setSpeed(0.5)
 
 ```typescript
 import { RainyWindow } from '@arayui/rainy-day'
-```
+
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container, {
   intensity: 0.5,
@@ -91,7 +91,7 @@ await rainyWindow.loadVideo('path/to/video.mp4')
 ```typescript
 // 实时调整参数
 const gui = new dat.GUI()
-gui.add({ intensity: 0.4 }, 'intensity', 0, 1).onChange((value) => {
+gui.add({ intensity: 0.4 }, 'intensity', 0, 1).onChange((value: number) => {
   rainyWindow.setIntensity(value)
 })
 
@@ -100,7 +100,6 @@ rainyWindow.setLightning(true) // 启用闪电
 rainyWindow.setPanning(true)   // 启用平移
 rainyWindow.setPostProcessing(false) // 禁用后处理
 ```
-
 
 ### CDN使用方式
 
@@ -189,18 +188,18 @@ new RainyWindow(container: HTMLElement, options?: RainyWindowOptions)
 #### 方法
 
 ##### 参数控制
-- `setIntensity(value: number)` - 设置雨滴强度
-- `setSpeed(value: number)` - 设置雨滴速度
-- `setBrightness(value: number)` - 设置亮度
-- `setNormal(value: number)` - 设置法线强度
-- `setZoom(value: number)` - 设置缩放比例
-- `setBlurIntensity(value: number)` - 设置模糊强度
-- `setBlurIterations(value: number)` - 设置模糊迭代次数
-- `setPanning(value: boolean)` - 启用/禁用平移效果
-- `setPostProcessing(value: boolean)` - 启用/禁用后处理
-- `setLightning(value: boolean)` - 启用/禁用闪电效果
-- `setTextureFill(value: boolean)` - 启用/禁用纹理填充
-- `setFps(value: number)` - 设置帧率
+- `setIntensity(value: number): void` - 设置雨滴强度
+- `setSpeed(value: number): void` - 设置雨滴速度
+- `setBrightness(value: number): void` - 设置亮度
+- `setNormal(value: number): void` - 设置法线强度
+- `setZoom(value: number): void` - 设置缩放比例
+- `setBlurIntensity(value: number): void` - 设置模糊强度
+- `setBlurIterations(value: number): void` - 设置模糊迭代次数
+- `setPanning(value: boolean): void` - 启用/禁用平移效果
+- `setPostProcessing(value: boolean): void` - 启用/禁用后处理
+- `setLightning(value: boolean): void` - 启用/禁用闪电效果
+- `setTextureFill(value: boolean): void` - 启用/禁用纹理填充
+- `setFps(value: number): void` - 设置帧率
 
 ##### 资源管理
 - `loadImage(url: string): Promise<void>` - 加载背景图片
@@ -213,18 +212,18 @@ new RainyWindow(container: HTMLElement, options?: RainyWindowOptions)
 
 ```typescript
 interface RainyWindowOptions {
-  intensity?: number
-  speed?: number
-  brightness?: number
-  normal?: number
-  zoom?: number
-  blurIntensity?: number
-  blurIterations?: number
-  panning?: boolean
-  postProcessing?: boolean
-  lightning?: boolean
-  textureFill?: boolean
-  fps?: number
+  intensity?: number      // 雨滴强度 (0-1)
+  speed?: number         // 雨滴速度 (0-10)
+  brightness?: number    // 亮度调节 (0-1)
+  normal?: number        // 法线强度 (0-3)
+  zoom?: number          // 缩放比例 (0.1-3)
+  blurIntensity?: number // 模糊强度 (0-10)
+  blurIterations?: number // 模糊迭代次数 (1-64)
+  panning?: boolean      // 平移效果开关
+  postProcessing?: boolean // 后处理开关
+  lightning?: boolean    // 闪电效果开关
+  textureFill?: boolean  // 纹理填充开关
+  fps?: number           // 帧率设置 (15-120)
 }
 
 interface RainyWindowControls {

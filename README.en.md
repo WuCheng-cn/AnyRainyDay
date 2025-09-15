@@ -50,7 +50,7 @@ npm install @arayui/rainy-day
 
 ```typescript
 import { RainyWindow } from '@arayui/rainy-day'
-```
+
 // Create raindrop effect
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container)
@@ -66,7 +66,7 @@ rainyWindow.setSpeed(0.5)
 ### Using Configuration Options
 
 ```typescript
-import { RainyWindow } from 'any-rainy-day'
+import { RainyWindow } from '@arayui/rainy-day'
 
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container, {
@@ -91,7 +91,7 @@ await rainyWindow.loadVideo('path/to/video.mp4')
 ```typescript
 // Real-time parameter adjustment
 const gui = new dat.GUI()
-gui.add({ intensity: 0.4 }, 'intensity', 0, 1).onChange((value) => {
+gui.add({ intensity: 0.4 }, 'intensity', 0, 1).onChange((value: number) => {
   rainyWindow.setIntensity(value)
 })
 
@@ -101,7 +101,48 @@ rainyWindow.setPanning(true)   // Enable panning
 rainyWindow.setPostProcessing(false) // Disable post-processing
 ```
 
-### Complete Example
+### CDN Usage
+
+If you want to use CDN, you can directly import the UMD format file:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Raindrop Window Effect - CDN Usage</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; }
+        #rain-container { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="rain-container"></div>
+    
+    <!-- Import @arayui/rainy-day -->
+    <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
+    
+    <script>
+        // Wait for page load
+        window.addEventListener('load', function() {
+            const container = document.getElementById('rain-container')
+            
+            // Create raindrop effect instance
+            const rainyWindow = new window.any.RainyWindow(container, {
+                intensity: 0.5,
+                speed: 0.3,
+                lightning: true,
+                fps: 60
+            })
+            
+            // Load background image
+            rainyWindow.loadImage('https://picsum.photos/1920/1080')
+        })
+    </script>
+</body>
+</html>
+```
+
+### Complete Example (ES Module)
 
 ```html
 <!DOCTYPE html>
@@ -117,7 +158,7 @@ rainyWindow.setPostProcessing(false) // Disable post-processing
     <div id="rain-container"></div>
     
     <script type="module">
-        import { RainyWindow } from './dist/any-rainy-day.es.js'
+        import { RainyWindow } from 'https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs'
         
         const container = document.getElementById('rain-container')
         const rainyWindow = new RainyWindow(container, {
@@ -147,18 +188,18 @@ new RainyWindow(container: HTMLElement, options?: RainyWindowOptions)
 #### Methods
 
 ##### Parameter Control
-- `setIntensity(value: number)` - Set raindrop intensity
-- `setSpeed(value: number)` - Set raindrop speed
-- `setBrightness(value: number)` - Set brightness
-- `setNormal(value: number)` - Set normal intensity
-- `setZoom(value: number)` - Set zoom ratio
-- `setBlurIntensity(value: number)` - Set blur intensity
-- `setBlurIterations(value: number)` - Set blur iterations
-- `setPanning(value: boolean)` - Enable/disable panning effect
-- `setPostProcessing(value: boolean)` - Enable/disable post-processing
-- `setLightning(value: boolean)` - Enable/disable lightning effect
-- `setTextureFill(value: boolean)` - Enable/disable texture fill
-- `setFps(value: number)` - Set frame rate
+- `setIntensity(value: number): void` - Set raindrop intensity
+- `setSpeed(value: number): void` - Set raindrop speed
+- `setBrightness(value: number): void` - Set brightness
+- `setNormal(value: number): void` - Set normal intensity
+- `setZoom(value: number): void` - Set zoom ratio
+- `setBlurIntensity(value: number): void` - Set blur intensity
+- `setBlurIterations(value: number): void` - Set blur iterations
+- `setPanning(value: boolean): void` - Enable/disable panning effect
+- `setPostProcessing(value: boolean): void` - Enable/disable post-processing
+- `setLightning(value: boolean): void` - Enable/disable lightning effect
+- `setTextureFill(value: boolean): void` - Enable/disable texture fill
+- `setFps(value: number): void` - Set frame rate
 
 ##### Resource Management
 - `loadImage(url: string): Promise<void>` - Load background image
@@ -171,18 +212,18 @@ new RainyWindow(container: HTMLElement, options?: RainyWindowOptions)
 
 ```typescript
 interface RainyWindowOptions {
-  intensity?: number
-  speed?: number
-  brightness?: number
-  normal?: number
-  zoom?: number
-  blurIntensity?: number
-  blurIterations?: number
-  panning?: boolean
-  postProcessing?: boolean
-  lightning?: boolean
-  textureFill?: boolean
-  fps?: number
+  intensity?: number      // Raindrop intensity (0-1)
+  speed?: number          // Raindrop speed (0-10)
+  brightness?: number     // Brightness adjustment (0-1)
+  normal?: number         // Normal intensity (0-3)
+  zoom?: number           // Zoom ratio (0.1-3)
+  blurIntensity?: number  // Blur intensity (0-10)
+  blurIterations?: number // Blur iterations (1-64)
+  panning?: boolean       // Panning effect toggle
+  postProcessing?: boolean // Post-processing toggle
+  lightning?: boolean     // Lightning effect toggle
+  textureFill?: boolean   // Texture fill toggle
+  fps?: number            // Frame rate setting (15-120)
 }
 
 interface RainyWindowControls {
