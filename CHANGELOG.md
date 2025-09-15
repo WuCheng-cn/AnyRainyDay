@@ -1,5 +1,11 @@
 # CHANGELOG | 变更日志
 
+## [1.0.4](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.3...1.0.4) (2025-09-15)
+
+### ♻️ Code Refactoring | 重构
+
+* 重构库名为@arayui/rainy-day并优化UMD支持 ([0fb3d6c](https://github.com/WuCheng-cn/AnyRainyDay/commit/0fb3d6c0231b36527162717cf66f84b6efea28b1))
+
 ## [1.0.3](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.1...1.0.3) (2025-09-15)
 
 ### ♻️ Code Refactoring | 重构
