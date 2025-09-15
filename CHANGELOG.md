@@ -1,5 +1,11 @@
 # CHANGELOG | 变更日志
 
+## [1.0.5](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.4...1.0.5) (2025-09-15)
+
+### 📝 Documentation | 文档变更
+
+* 更新README文档中的代码示例和类型定义 ([edeaf2d](https://github.com/WuCheng-cn/AnyRainyDay/commit/edeaf2daba16dda44e329c1d5b8d192ceda79b7c))
+
 ## [1.0.4](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.3...1.0.4) (2025-09-15)
 
 ### ♻️ Code Refactoring | 重构
