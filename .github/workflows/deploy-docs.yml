@@ -37,15 +37,18 @@ jobs:
         with:
           fetch-depth: 0 # 确保获取所有历史记录和标签
           
+      # 使用官方action安装pnpm
+      - name: 安装pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+          
       - name: 设置Node.js环境
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-          
-      # 使用npm全局安装pnpm - 这种方式更可靠
-      - name: 安装pnpm
-        run: npm install -g pnpm
         
       - name: 安装依赖
         run: pnpm install
