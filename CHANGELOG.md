@@ -1,5 +1,23 @@
 # CHANGELOG | 变更日志
 
+## [1.0.3](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.1...1.0.3) (2025-09-15)
+
+### ♻️ Code Refactoring | 重构
+
+* **docs:** 更新 rainy-day 库的引用路径为 @arayui 组织 ([472895d](https://github.com/WuCheng-cn/AnyRainyDay/commit/472895d55e9a98e250a5e3f58c99c621c06381a7))
+
+### ✨ Features | 新功能
+
+* 优化雨滴效果算法使其不受容器高度影响 ([d4ccd45](https://github.com/WuCheng-cn/AnyRainyDay/commit/d4ccd452bea714b4b8a0496332b40035f555ce4b))
+
+### 📝 Documentation | 文档变更
+
+* 修正文档基础路径大小写问题 ([4f6caa3](https://github.com/WuCheng-cn/AnyRainyDay/commit/4f6caa398bc79b08aa1adc3e7efb9fb5b17afdc2))
+
+### 🚀 Chores | 构建/工程依赖/工具
+
+* **build:** 更新构建配置并添加CDN支持 ([ad5ebb6](https://github.com/WuCheng-cn/AnyRainyDay/commit/ad5ebb673710a39491cf11e1100c6caa3f94ca13))
+
 ## 1.0.1 (2025-09-12)
 
 ### ✨ Features | 新功能
