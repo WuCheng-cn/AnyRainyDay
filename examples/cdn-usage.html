@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>any-rainy-day CDN使用示例</title>
+    <title>@arayui/rainy-day CDN使用示例</title>
     <style>
         body {
             margin: 0;
@@ -59,7 +59,7 @@
 </head>
 <body>
     <div class="info">
-        <h1>any-rainy-day CDN使用示例</h1>
+        <h1>@arayui/rainy-day CDN使用示例</h1>
         <p>通过CDN方式引入雨滴效果</p>
     </div>
     
@@ -73,30 +73,40 @@
     </div>
 
     <!-- 正确的CDN引入方式 -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script> -->
+    <script src="../dist/index.min.js"></script>
     
     <script>
         let rainy;
         let intensityLevel = 0.5;
         let speedLevel = 1.0;
-        const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb'];
-        let colorIndex = 0;
 
         // 初始化雨滴效果
         function initRainy() {
             const container = document.getElementById('rainy-container');
             
-            rainy = new RainyWindow({
-                container: container,
+            // 确保库已加载
+            if (typeof window.any === 'undefined') {
+                console.error('@arayui/rainy-day 库未正确加载');
+                return;
+            }
+            
+            rainy = new window.any.RainyWindow(container, {
                 intensity: intensityLevel,
                 speed: speedLevel,
-                dropSize: 2.5,
-                opacity: 0.7,
-                color: colors[colorIndex],
-                interactive: true,
-                autoResize: true
+                brightness: 0.8,
+                normal: 0.5,
+                zoom: 1.2,
+                blurIntensity: 0.8,
+                blurIterations: 16,
+                panning: true,
+                postProcessing: true,
+                lightning: false,
+                textureFill: true,
+                fps: 30
             });
+            rainy.loadImage('https://picsum.photos/1920/1080')
+
         }
 
         // 控制函数
@@ -112,7 +122,8 @@
 
         function changeColor() {
             colorIndex = (colorIndex + 1) % colors.length;
-            rainy.setColor(colors[colorIndex]);
+            // 注意：实际API没有setColor方法，这里移除颜色切换功能
+            console.log('颜色切换功能需要自定义实现');
         }
 
         function reset() {
@@ -121,7 +132,6 @@
             colorIndex = 0;
             rainy.setIntensity(intensityLevel);
             rainy.setSpeed(speedLevel);
-            rainy.setColor(colors[colorIndex]);
         }
 
         // 页面加载完成后初始化

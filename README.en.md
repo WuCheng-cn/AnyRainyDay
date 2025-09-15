@@ -1,6 +1,8 @@
-# any-rainy-day 🌧️
+# @arayui/rainy-day 🌧️
 
-any-rainy-day is a raindrop window effect library based on Three.js, creating realistic raindrops falling on a window through WebGL shader technology. Supports background images and videos, with rich parameter control interfaces.
+`@arayui/rainy-day` is a raindrop window effect library based on Three.js, creating realistic raindrops falling on a window through WebGL shader technology. Supports background images and videos, with rich parameter control interfaces.
+
+[📖 Online Docs](https://wucheng-cn.github.io/AnyRainyDay/) | [📦 NPM Package](https://www.npmjs.com/package/@arayui/rainy-day)
 
 ## Key Features ✨
 
@@ -33,13 +35,13 @@ any-rainy-day is a raindrop window effect library based on Three.js, creating re
 Install using pnpm:
 
 ```bash
-pnpm install any-rainy-day
+pnpm install @arayui/rainy-day
 ```
 
 Or using npm:
 
 ```bash
-npm install any-rainy-day
+npm install @arayui/rainy-day
 ```
 
 ## Usage Examples 🚀
@@ -47,8 +49,8 @@ npm install any-rainy-day
 ### Basic Usage
 
 ```typescript
-import { RainyWindow } from 'any-rainy-day'
-
+import { RainyWindow } from '@arayui/rainy-day'
+```
 // Create raindrop effect
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container)

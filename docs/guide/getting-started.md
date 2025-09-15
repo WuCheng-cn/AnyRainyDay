@@ -1,6 +1,6 @@
 # 快速开始
 
-本指南将帮助你快速上手 any-rainy-day 雨滴窗口效果库，了解其基本概念和使用方法。
+本指南将帮助你快速上手 `@arayui/rainy-day` 雨滴窗口效果库，了解其基本概念和使用方法。
 
 ## 安装
 
@@ -8,23 +8,20 @@
 
 ```bash
 # 使用 npm
-npm install any-rainy-day
+npm install @arayui/rainy-day
 
 # 使用 yarn
-yarn add any-rainy-day
+yarn add @arayui/rainy-day
 
 # 使用 pnpm
-pnpm add any-rainy-day
+pnpm add @arayui/rainy-day
 ```
 
 ### 使用 CDN
 
 ```html
-<!-- 引入 Three.js -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-
-<!-- 引入 any-rainy-day -->
-<script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
+<!-- 引入 @arayui/rainy-day -->
+<script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
 ```
 
 ## 基础概念
@@ -83,10 +80,8 @@ any-rainy-day 是一个基于 Three.js 的逼真雨滴窗口特效库，主要�
 <body>
   <div id="rainy-container"></div>
   
-  <!-- 引入 Three.js -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-  <!-- 引入 any-rainy-day -->
-  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
+  <!-- 引入 @arayui/rainy-day -->
+  <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
@@ -135,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 如果你使用 TypeScript：
 
 ```typescript
-import { RainyWindow, RainyWindowOptions } from 'any-rainy-day'
+import { RainyWindow, RainyWindowOptions } from '@arayui/rainy-day'
 
 // 定义配置选项
 const options: RainyWindowOptions = {
@@ -295,7 +290,6 @@ rainy.on('resize', (width: number, height: number) => {
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     let rainy

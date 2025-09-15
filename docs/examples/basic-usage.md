@@ -1,6 +1,6 @@
 # 基础使用示例
 
-本章节将通过完整的示例，展示如何在实际项目中使用 any-rainy-day 雨滴窗口效果库，包括各种配置选项、动态控制和高级用法。
+本章节将通过完整的示例，展示如何在实际项目中使用 `@arayui/rainy-day` 雨滴窗口效果库，包括各种配置选项、动态控制和高级用法。
 
 ## 基础配置示例
 
@@ -75,14 +75,13 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     let rainy
     let isRaining = true
 
     function initRain() {
-      rainy = new RainyWindow({
+      rainy = new window.any.RainyWindow({
         container: document.getElementById('rainy-background'),
         intensity: 0.5,
         speed: 1.2,
@@ -236,7 +235,6 @@ function createResponsiveRain() {
   
   <div id="rainy-container"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     const themes = {
@@ -611,11 +609,10 @@ const rainy = new CustomRainyWindow({
     </form>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const rainy = new RainyWindow({
+      const rainy = new window.any.RainyWindow({
         container: document.getElementById('rainy-bg'),
         intensity: 0.4,
         speed: 0.8,

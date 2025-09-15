@@ -24,7 +24,7 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
       },
       // 库的全局变量名（在 UMD 格式中使用）
-      name: 'RainyWindow',
+      name: 'any',
       // 输出的文件名格式
       fileName: (format, entryName) => {
         if (format === 'umd')

@@ -7,7 +7,9 @@ import './style.css'
 declare global {
   interface Window {
     rainScriptsLoaded?: boolean
-    RainyWindow?: any
+    any?: {
+      RainyWindow?: any
+    }
   }
 }
 
@@ -25,14 +27,14 @@ export default {
 
     window.addEventListener('load', () => {
       // 只在首页添加演示
-      if (window.location.pathname.includes('/any-rainy-day/') || window.location.pathname === '/') {
+      if (window.location.pathname.includes('/AnyRainyDay/') || window.location.pathname === '/') {
         addRainDemo()
       }
     })
 
     // 监听路由变化
     router.onAfterRouteChange = (to: string) => {
-      if (to === '/' || to === '/any-rainy-day/') {
+      if (to === '/' || to === '/AnyRainyDay/') {
         setTimeout(addRainDemo, 100)
       }
     }
@@ -106,8 +108,7 @@ function loadRainScripts(): Promise<void> {
     }
 
     const scripts = [
-      'https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js',
-      'https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs',
+      'https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js',
     ]
 
     let loaded = 0
@@ -132,7 +133,7 @@ function loadRainScripts(): Promise<void> {
  * 初始化雨滴演示
  */
 function initRainDemo(): void {
-  if (typeof window.RainyWindow === 'undefined') {
+  if (typeof window.any?.RainyWindow === 'undefined') {
     return
   }
 
@@ -142,7 +143,7 @@ function initRainDemo(): void {
   }
 
   // 创建雨滴效果实例
-  const rainy = new window.RainyWindow({
+  const rainy = new window.any.RainyWindow({
     container,
     intensity: 0.5,
     speed: 1.2,

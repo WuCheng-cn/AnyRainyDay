@@ -1,6 +1,8 @@
-# any-rainy-day 🌧️
+# @arayui/rainy-day 🌧️
 
-any-rainy-day 是一个基于 Three.js 实现的雨滴窗口效果库，通过 WebGL 着色器技术创建逼真的雨滴落在窗户上的视觉效果。支持背景图片和视频，提供丰富的参数控制接口。
+`@arayui/rainy-day` 是一个基于 Three.js 实现的雨滴窗口效果库，通过 WebGL 着色器技术创建逼真的雨滴落在窗户上的视觉效果。支持背景图片和视频，提供丰富的参数控制接口。
+
+[📖 在线文档](https://wucheng-cn.github.io/AnyRainyDay/) | [📦 NPM包](https://www.npmjs.com/package/@arayui/rainy-day)
 
 ## 主要功能 ✨
 
@@ -33,13 +35,13 @@ any-rainy-day 是一个基于 Three.js 实现的雨滴窗口效果库，通过 W
 使用 pnpm 安装：
 
 ```bash
-pnpm install any-rainy-day
+pnpm install @arayui/rainy-day
 ```
 
 或者使用 npm：
 
 ```bash
-npm install any-rainy-day
+npm install @arayui/rainy-day
 ```
 
 ## 使用示例 🚀
@@ -47,8 +49,8 @@ npm install any-rainy-day
 ### 基础用法
 
 ```typescript
-import { RainyWindow } from 'any-rainy-day'
-
+import { RainyWindow } from '@arayui/rainy-day'
+```
 // 创建雨滴效果
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container)
@@ -64,8 +66,8 @@ rainyWindow.setSpeed(0.5)
 ### 使用配置选项
 
 ```typescript
-import { RainyWindow } from 'any-rainy-day'
-
+import { RainyWindow } from '@arayui/rainy-day'
+```
 const container = document.getElementById('rain-container')
 const rainyWindow = new RainyWindow(container, {
   intensity: 0.5,
@@ -117,9 +119,7 @@ rainyWindow.setPostProcessing(false) // 禁用后处理
 <body>
     <div id="rain-container"></div>
     
-    <!-- 引入Three.js -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
-    <!-- 引入any-rainy-day -->
+    <!-- 引入 @arayui/rainy-day -->
     <script src="https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.min.js"></script>
     
     <script>
@@ -128,7 +128,7 @@ rainyWindow.setPostProcessing(false) // 禁用后处理
             const container = document.getElementById('rain-container')
             
             // 创建雨滴效果实例
-            const rainyWindow = new RainyWindow(container, {
+            const rainyWindow = new window.any.RainyWindow(container, {
                 intensity: 0.5,
                 speed: 0.3,
                 lightning: true,
@@ -159,7 +159,7 @@ rainyWindow.setPostProcessing(false) // 禁用后处理
     <div id="rain-container"></div>
     
     <script type="module">
-        import { RainyWindow } from './dist/index.mjs'
+        import { RainyWindow } from 'https://cdn.jsdelivr.net/npm/@arayui/rainy-day@latest/dist/index.mjs'
         
         const container = document.getElementById('rain-container')
         const rainyWindow = new RainyWindow(container, {
