@@ -8,8 +8,9 @@ on:
     # 仅在docs目录或相关配置文件变化时触发
     paths:
       - 'docs/**'
-      - '.vitepress/**'
+      - 'docs/.vitepress/**'
       - 'package.json'
+      - 'pnpm-lock.yaml'
       - '.github/workflows/deploy-docs.yml'
 
   # 允许从Actions选项卡手动运行此工作流
@@ -40,7 +41,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
           
       # 使用npm全局安装pnpm - 这种方式更可靠
       - name: 安装pnpm
