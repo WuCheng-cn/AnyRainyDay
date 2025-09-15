@@ -37,7 +37,7 @@ export default defineConfig({
     // 配置 Rollup 选项
     rollupOptions: {
       // 声明外部依赖，避免将它们打包进库中
-      external: ['three'], // 将Three.js作为外部依赖
+      // external: ['three'], // 将Three.js作为外部依赖
       // 全局变量映射（UMD 构建时使用）
       output: {
         globals: {

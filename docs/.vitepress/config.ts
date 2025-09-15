@@ -32,6 +32,7 @@ export default defineConfig({
           text: '指南',
           items: [
             { text: '快速开始', link: '/guide/getting-started' },
+            { text: '响应式设计', link: '/guide/responsive-design' },
           ],
         },
       ],

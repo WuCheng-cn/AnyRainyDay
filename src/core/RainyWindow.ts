@@ -55,6 +55,8 @@ export class RainyWindow implements RainyWindowControls {
       antialias: false,
       alpha: true,
     })
+
+    // 填满整个容器，但保持雨滴大小一致性
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.container.appendChild(this.renderer.domElement)
@@ -71,7 +73,7 @@ export class RainyWindow implements RainyWindowControls {
       speed = 0.25,
       brightness = 0.8,
       normal = 0.5,
-      zoom = 2.61,
+      zoom = 1.0,
       blurIntensity = 0.5,
       blurIterations = 16,
       panning = false,
@@ -126,6 +128,8 @@ export class RainyWindow implements RainyWindowControls {
   /** # 处理窗口大小调整 📏 */
   private handleResize(): void {
     const { clientWidth, clientHeight } = this.container
+
+    // 填满整个容器，保持实际宽高
     this.renderer.setSize(clientWidth, clientHeight)
     this.material.uniforms.u_resolution.value.set(clientWidth, clientHeight)
   }

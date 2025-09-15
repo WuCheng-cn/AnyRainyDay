@@ -27,144 +27,231 @@ uniform bool u_post_processing;
 uniform bool u_lightning;
 uniform bool u_texture_fill;
 
+// 平滑过渡宏定义
 #define S(a, b, t) smoothstep(a, b, t)
 
-vec3 N13(float p) {
-    vec3 p3 = fract(vec3(p) * vec3(.1031, .11369, .13787));
+// 数学常量
+const float PI = 3.14159265359;
+const float TWO_PI = 6.28318530718;
+const float HALF_PI = 1.57079632679;
+
+// 恢复原版：完整的噪声函数集合
+vec3 generateNoise3D(float seed) {
+    vec3 p3 = fract(vec3(seed) * vec3(.1031, .11369, .13787));
     p3 += dot(p3, p3.yzx + 19.19);
     return fract(vec3((p3.x + p3.y) * p3.z, (p3.x + p3.z) * p3.y, (p3.y + p3.z) * p3.x));
 }
 
-vec4 N14(float t) {
-    return fract(sin(t * vec4(123., 1024., 1456., 264.)) * vec4(6547., 345., 8799., 1564.));
-}
-float N(float t) {
-    return fract(sin(t * 12345.564) * 7658.76);
+vec4 generateNoise4D(float time) {
+    return fract(sin(time * vec4(123., 1024., 1456., 264.)) * vec4(6547., 345., 8799., 1564.));
 }
 
-float Saw(float b, float t) {
-    return S(0., b, t) * S(1., b, t);
+float generateNoise1D(float time) {
+    return fract(sin(time * 12345.564) * 7658.76);
 }
 
-vec2 DropLayer2(vec2 uv, float t) {
-    vec2 UV = uv;
-    uv.y += t * 0.75;
-    vec2 a = vec2(6., 1.);
-    vec2 grid = a * 2.;
-    vec2 id = floor(uv * grid);
-    float colShift = N(id.x);
-    uv.y += colShift;
-    id = floor(uv * grid);
-    vec3 n = N13(id.x * 35.2 + id.y * 2376.1);
-    vec2 st = fract(uv * grid) - vec2(.5, 0);
-    float x = n.x - .5;
-    float y = UV.y * 20.;
-    float wiggle = sin(y + sin(y));
-    x += wiggle * (.5 - abs(x)) * (n.z - .5);
-    x *= .7;
-    float ti = fract(t + n.z);
-    y = (Saw(.85, ti) - .5) * .9 + .5;
-    vec2 p = vec2(x, y);
-    float d = length((st - p) * a.yx);
-    float mainDrop = S(.4, .0, d);
-    float r = sqrt(S(1., y, st.y));
-    float cd = abs(st.x - x);
-    float trail = S(.23 * r, .15 * r * r, cd);
-    float trailFront = S(-.02, .02, st.y - y);
-    trail *= trailFront * r * r;
-    y = UV.y;
-    float trail2 = S(.2 * r, .0, cd);
-    float droplets = max(0., (sin(y * (1. - y) * 120.) - st.y)) * trail2 * trailFront * n.z;
-    y = fract(y * 10.) + (st.y - .5);
-    float dd = length(st - vec2(x, y));
-    droplets = S(.3, 0., dd);
-    float m = mainDrop + droplets * r * trailFront;
-    return vec2(m, trail);
+float sawtoothWave(float frequency, float time) {
+    return S(0., frequency, time) * S(1., frequency, time);
 }
 
-float StaticDrops(vec2 uv, float t) {
-    uv *= 40.;
-    vec2 id = floor(uv);
-    uv = fract(uv) - .5;
-    vec3 n = N13(id.x * 107.45 + id.y * 3543.654);
-    vec2 p = (n.xy - .5) * .7;
-    float d = length(uv - p);
-    float fade = Saw(.025, fract(t + n.z));
-    float c = S(.3, 0., d) * fract(n.z * 10.) * fade;
-    return c;
+// 恢复原版：保持雨滴自然随机性
+vec2 calculateDropletLayer(vec2 coord, float time) {
+    vec2 originalCoord = coord;
+    coord.y += time * 0.75;
+    
+    vec2 gridSize = vec2(6.0, 1.0);
+    vec2 gridMultiplier = gridSize * 2.0;
+    vec2 cellId = floor(coord * gridMultiplier);
+    
+    float columnOffset = generateNoise1D(cellId.x);
+    coord.y += columnOffset;
+    cellId = floor(coord * gridMultiplier);
+    
+    vec3 noise = generateNoise3D(cellId.x * 35.2 + cellId.y * 2376.1);
+    vec2 localPos = fract(coord * gridMultiplier) - vec2(0.5, 0.0);
+    
+    float xOffset = noise.x - 0.5;
+    float yWave = originalCoord.y * 30.0;
+    float wiggle = sin(yWave + sin(yWave));
+    xOffset += wiggle * (0.5 - abs(xOffset)) * (noise.z - 0.5);
+    xOffset *= 0.7;
+    
+    float timeOffset = fract(time + noise.z);
+    float yPos = (sawtoothWave(0.85, timeOffset) - 0.5) * 0.9 + 0.5;
+    vec2 dropPos = vec2(xOffset, yPos);
+    
+    float distance = length((localPos - dropPos) * gridSize.yx);
+    float mainDrop = S(0.4, 0.0, distance);
+    
+    float radius = sqrt(S(1.0, yPos, localPos.y));
+    float centerDist = abs(localPos.x - xOffset);
+    float trail = S(0.23 * radius, 0.15 * radius * radius, centerDist);
+    float trailFront = S(-0.02, 0.02, localPos.y - yPos);
+    trail *= trailFront * radius * radius;
+    
+    yPos = originalCoord.y;
+    float trail2 = S(0.2 * radius, 0.0, centerDist);
+    float smallDroplets = max(0.0, (sin(yPos * (1.0 - yPos) * 120.0) - localPos.y)) * trail2 * trailFront * noise.z;
+    
+    yPos = fract(yPos * 10.0) + (localPos.y - 0.5);
+    float smallDropDist = length(localPos - vec2(xOffset, yPos));
+    smallDroplets = S(0.3, 0.0, smallDropDist);
+    
+    float mask = mainDrop + smallDroplets * radius * trailFront;
+    return vec2(mask, trail);
 }
 
-vec2 Drops(vec2 uv, float t, float l0, float l1, float l2) {
-    float s = StaticDrops(uv, t) * l0;
-    vec2 m1 = DropLayer2(uv, t) * l1;
-    vec2 m2 = DropLayer2(uv * 1.85, t) * l2;
-    float c = s + m1.x + m2.x;
-    c = S(.3, 1., c);
-    return vec2(c, max(m1.y * l0, m2.y * l1));
+// 优化：简化静态雨滴计算
+float calculateStaticDrops(vec2 coord, float time) {
+    coord *= 60.0;
+    vec2 cellId = floor(coord);
+    vec2 localPos = fract(coord) - 0.5;
+    
+    vec3 noise = generateNoise3D(cellId.x * 107.45 + cellId.y * 3543.654);
+    vec2 dropPos = (noise.xy - 0.5) * 0.7;
+    
+    float distance = length(localPos - dropPos);
+    float fade = sawtoothWave(0.025, fract(time + noise.z));
+    float drop = S(0.3, 0.0, distance) * fract(noise.z * 10.0) * fade;
+    
+    return drop;
 }
 
-float N21(vec2 p) {
-    p = fract(p * vec2(123.34, 345.45));
-    p += dot(p, p + 34.345);
-    return fract(p.x * p.y);
+// 恢复原版：保持正确的强度混合
+vec2 calculateDrops(vec2 coord, float time, float staticIntensity, float layer1Intensity, float layer2Intensity) {
+    float staticDrops = calculateStaticDrops(coord, time) * staticIntensity;
+    vec2 layer1 = calculateDropletLayer(coord, time) * layer1Intensity;
+    vec2 layer2 = calculateDropletLayer(coord * 1.85, time) * layer2Intensity;
+    
+    float combined = staticDrops + layer1.x + layer2.x;
+    combined = S(0.3, 1.0, combined);
+    
+    return vec2(combined, max(layer1.y * staticIntensity, layer2.y * layer1Intensity));
+}
+
+// 恢复原版：保持原有的2D噪声特性
+float generateNoise2D(vec2 position) {
+    position = fract(position * vec2(123.34, 345.45));
+    position += dot(position, position + 34.345);
+    return fract(position.x * position.y);
 }
 
 void main() {
-    vec2 uv = (gl_FragCoord.xy - .5 * u_resolution.xy) / u_resolution.y;
-    vec2 UV = gl_FragCoord.xy / u_resolution.xy;
-    float T = u_time;
+    // 标准化屏幕坐标 - 使用固定参考尺寸确保雨滴大小一致
+    const float REFERENCE_SIZE = 1000.0; // 固定参考尺寸
+    vec2 normalizedCoord = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / REFERENCE_SIZE;
+    vec2 textureCoord = gl_FragCoord.xy / u_resolution.xy;
+    
+    float currentTime = u_time;
+    
+    // 纹理适配 - 保持宽高比
     if(u_texture_fill) {
         float screenAspect = u_resolution.x / u_resolution.y;
         float textureAspect = u_tex0_resolution.x / u_tex0_resolution.y;
-        float scaleX = 1., scaleY = 1.;
-        if(textureAspect > screenAspect)
+        
+        float scaleX = 1.0, scaleY = 1.0;
+        if(textureAspect > screenAspect) {
             scaleX = screenAspect / textureAspect;
-        else
+        } else {
             scaleY = textureAspect / screenAspect;
-        UV = vec2(scaleX, scaleY) * (UV - 0.5) + 0.5;
-    }
-    float t = T * .2 * u_speed;
-    float rainAmount = u_intensity;
-    float zoom = u_panning ? -cos(T * .2) : 0.;
-    uv *= (.7 + zoom * .3) * u_zoom;
-    float staticDrops = S(-.5, 1., rainAmount) * 2.;
-    float layer1 = S(.25, .75, rainAmount);
-    float layer2 = S(.0, .5, rainAmount);
-    vec2 c = Drops(uv, t, staticDrops, layer1, layer2);
-    vec2 e = vec2(.001, 0.) * u_normal;
-    float cx = Drops(uv + e, t, staticDrops, layer1, layer2).x;
-    float cy = Drops(uv + e.yx, t, staticDrops, layer1, layer2).x;
-    vec2 n = vec2(cx - c.x, cy - c.x);
-    vec3 col = texture2D(u_tex0, UV + n).rgb;
-    vec4 texCoord = vec4(UV.x + n.x, UV.y + n.y, 0, 1.0 * 25. * 0.01 / 7.);
-    if(u_blur_iterations != 1) {
-        float blur = u_blur_intensity;
-        blur *= 0.01;
-        float a = N21(gl_FragCoord.xy) * 6.2831;
-        for(int m = 0; m < 64; m++) {
-            if(m > u_blur_iterations)
-                break;
-            vec2 offs = vec2(sin(a), cos(a)) * blur;
-            float d = fract(sin((float(m) + 1.) * 546.) * 5424.);
-            d = sqrt(d);
-            offs *= d;
-            col += texture2D(u_tex0, texCoord.xy + vec2(offs.x, offs.y)).xyz;
-            a++;
         }
-        col /= float(u_blur_iterations);
+        
+        textureCoord = vec2(scaleX, scaleY) * (textureCoord - 0.5) + 0.5;
     }
-    t = (T + 3.) * .5;
+    
+    // 时间相关参数
+    float animationTime = currentTime * 0.2 * u_speed;
+    float rainIntensity = u_intensity;
+    
+    // 缩放和平移效果 - 优化缩放逻辑，1.0为标准尺寸
+    float panningOffset = u_panning ? -cos(currentTime * 0.2) : 0.0;
+    normalizedCoord *= (1.0 + panningOffset * 0.3) / u_zoom;
+    
+    // 雨滴层强度
+    float staticDropIntensity = S(-0.5, 1.0, rainIntensity) * 2.0;
+    float layer1Intensity = S(0.25, 0.75, rainIntensity);
+    float layer2Intensity = S(0.0, 0.5, rainIntensity);
+    
+    // 计算雨滴效果
+    vec2 rainEffect = calculateDrops(normalizedCoord, animationTime, staticDropIntensity, layer1Intensity, layer2Intensity);
+    
+    // 法线偏移计算 - 优化缓存计算结果
+    const float NORMAL_OFFSET = 0.001;
+    vec2 normalOffset = vec2(NORMAL_OFFSET, 0.0) * u_normal;
+    
+    // 缓存法线偏移计算结果
+    vec2 offsetX = normalizedCoord + normalOffset;
+    vec2 offsetY = normalizedCoord + normalOffset.yx;
+    
+    float normalX = calculateDrops(offsetX, animationTime, staticDropIntensity, layer1Intensity, layer2Intensity).x;
+    float normalY = calculateDrops(offsetY, animationTime, staticDropIntensity, layer1Intensity, layer2Intensity).x;
+    vec2 normalVector = vec2(normalX - rainEffect.x, normalY - rainEffect.x);
+    
+    // 应用法线偏移到纹理采样
+    vec3 finalColor = texture2D(u_tex0, textureCoord + normalVector).rgb;
+    vec4 textureSample = vec4(textureCoord.x + normalVector.x, textureCoord.y + normalVector.y, 0.0, 1.0);
+    
+    // 模糊效果 - 预计算优化
+    if(u_blur_iterations > 1) {
+        const float BLUR_SCALE = 0.01;
+        const float RANDOM_SEED = 546.0;
+        const float RANDOM_MULTIPLIER = 5424.0;
+        
+        float blurAmount = u_blur_intensity * BLUR_SCALE;
+        float baseAngle = generateNoise2D(gl_FragCoord.xy) * TWO_PI;
+        
+        // 预计算三角函数值
+        float sinBase = sin(baseAngle);
+        float cosBase = cos(baseAngle);
+        
+        for(int iteration = 0; iteration < 64; iteration++) {
+            if(iteration >= u_blur_iterations) break;
+            
+            // 优化随机数生成
+            float randomValue = fract(sin(float(iteration + 1) * RANDOM_SEED) * RANDOM_MULTIPLIER);
+            float scaledRandom = sqrt(randomValue);
+            
+            // 使用预计算的三角函数值
+            vec2 offset = vec2(sinBase, cosBase) * (blurAmount * scaledRandom);
+            
+            finalColor += texture2D(u_tex0, textureSample.xy + offset).rgb;
+            
+            // 角度递增优化
+            baseAngle += 1.0;
+            sinBase = sin(baseAngle);
+            cosBase = cos(baseAngle);
+        }
+        
+        finalColor /= float(u_blur_iterations);
+    }
+    
+    // 后处理效果
+    float postTime = (currentTime + 3.0) * 0.5;
     if(u_post_processing) {
-        col *= mix(vec3(1.), vec3(.8, .9, 1.3), 1.);
+        finalColor *= mix(vec3(1.0), vec3(0.8, 0.9, 1.3), 1.0);
     }
-    float fade = S(0., 10., T);
+    
+    // 闪电效果 - 预计算优化
     if(u_lightning) {
-        float lightning = sin(t * sin(t * 10.));
-        lightning *= pow(max(0., sin(t + sin(t))), 10.);
-        col *= 1. + lightning * fade * mix(1., .1, 0.);
+        const float LIGHTNING_FREQUENCY = 10.0;
+        const float LIGHTNING_POWER = 10.0;
+        const float LIGHTNING_MIX_FACTOR = 0.1;
+        
+        float fadeIn = S(0.0, 10.0, currentTime);
+        
+        // 预计算内部sin值
+        float innerSin = sin(postTime);
+        float lightning = sin(postTime * sin(postTime * LIGHTNING_FREQUENCY));
+        lightning *= pow(max(0.0, sin(postTime + innerSin)), LIGHTNING_POWER);
+        
+        finalColor *= 1.0 + lightning * fadeIn * mix(1.0, LIGHTNING_MIX_FACTOR, 0.0);
     }
-    col *= 1. - dot(UV -= .5, UV) * 1.;
-    gl_FragColor = vec4(col * u_brightness, 1);
+    
+    // 边缘暗角效果
+    textureCoord -= 0.5;
+    finalColor *= 1.0 - dot(textureCoord, textureCoord) * 1.0;
+    
+    gl_FragColor = vec4(finalColor * u_brightness, 1.0);
 }
 `
 

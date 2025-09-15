@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高度测试 - any-rainy-day</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .test-box {
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .test-box h3 {
+            margin: 0;
+            padding: 10px;
+            background: #333;
+            font-size: 14px;
+        }
+        .rain-container {
+            position: relative;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+        }
+        .controls label {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+        .controls input[type="range"] {
+            width: 100px;
+            margin-left: 5px;
+        }
+        .controls button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .controls button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>高度测试 - 验证雨滴效果不受容器高度影响</h1>
+    
+    <div class="controls">
+        <label>雨滴强度: <input type="range" id="intensity" min="0" max="1" step="0.1" value="0.4"></label>
+        <label>雨滴速度: <input type="range" id="speed" min="0" max="10" step="0.1" value="0.25"></label>
+        <label>缩放比例: <input type="range" id="zoom" min="0.1" max="3" step="0.1" value="2.61"></label>
+        <button onclick="applySettings()">应用设置</button>
+        <button onclick="resetSettings()">重置</button>
+    </div>
+
+    <div class="container">
+        <div class="test-box">
+            <h3>高容器 (300x600)</h3>
+            <div id="container1" class="rain-container" style="width: 300px; height: 600px;"></div>
+        </div>
+        
+        <div class="test-box">
+            <h3>宽容器 (600x300)</h3>
+            <div id="container2" class="rain-container" style="width: 600px; height: 300px;"></div>
+        </div>
+        
+        <div class="test-box">
+            <h3>正方形容器 (400x400)</h3>
+            <div id="container3" class="rain-container" style="width: 400px; height: 400px;"></div>
+        </div>
+        
+        <div class="test-box">
+            <h3>小容器 (200x200)</h3>
+            <div id="container4" class="rain-container" style="width: 200px; height: 200px;"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { RainyWindow } from '../dist/index.mjs';
+
+        const containers = [
+            document.getElementById('container1'),
+            document.getElementById('container2'),
+            document.getElementById('container3'),
+            document.getElementById('container4')
+        ];
+
+        const rainyWindows = [];
+
+        // 初始化所有容器的雨滴效果
+        containers.forEach((container, index) => {
+            const rainyWindow = new RainyWindow(container, {
+                intensity: 0.4,
+                speed: 0.25,
+                brightness: 0.8,
+                normal: 0.5,
+                zoom: 2.61,
+                blurIntensity: 0.5,
+                blurIterations: 16,
+                postProcessing: true,
+                textureFill: true
+            });
+
+            // 加载背景图片
+            rainyWindow.loadImage('https://picsum.photos/1920/1080').catch(err => {
+                console.warn(`容器 ${index + 1} 背景图片加载失败，使用默认背景`);
+            });
+
+            rainyWindows.push(rainyWindow);
+        });
+
+        // 应用设置到所有容器
+        window.applySettings = function() {
+            const intensity = parseFloat(document.getElementById('intensity').value);
+            const speed = parseFloat(document.getElementById('speed').value);
+            const zoom = parseFloat(document.getElementById('zoom').value);
+
+            rainyWindows.forEach(rainyWindow => {
+                rainyWindow.setIntensity(intensity);
+                rainyWindow.setSpeed(speed);
+                rainyWindow.setZoom(zoom);
+            });
+        };
+
+        // 重置设置
+        window.resetSettings = function() {
+            document.getElementById('intensity').value = 0.4;
+            document.getElementById('speed').value = 0.25;
+            document.getElementById('zoom').value = 2.61;
+            applySettings();
+        };
+
+        // 清理函数
+        window.addEventListener('beforeunload', () => {
+            rainyWindows.forEach(rainyWindow => {
+                rainyWindow.destroy();
+            });
+        });
+    </script>
+</body>
+</html>
