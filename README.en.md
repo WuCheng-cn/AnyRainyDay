@@ -21,7 +21,7 @@
 | speed | Raindrop speed | 0-10 | 0.25 |
 | brightness | Brightness adjustment | 0-1 | 0.8 |
 | normal | Normal intensity | 0-3 | 0.5 |
-| zoom | Zoom ratio | 0.1-3 | 2.61 |
+| zoom | Zoom ratio | 0.1-3 | 1 |
 | blurIntensity | Blur intensity | 0-10 | 0.5 |
 | blurIterations | Blur iterations | 1-64 | 16 |
 | panning | Panning effect toggle | boolean | false |

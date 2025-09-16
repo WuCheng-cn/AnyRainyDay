@@ -21,7 +21,7 @@
 | speed | 雨滴速度 | 0-10 | 0.25 |
 | brightness | 亮度调节 | 0-1 | 0.8 |
 | normal | 法线强度 | 0-3 | 0.5 |
-| zoom | 缩放比例 | 0.1-3 | 2.61 |
+| zoom | 缩放比例 | 0.1-3 | 1 |
 | blurIntensity | 模糊强度 | 0-10 | 0.5 |
 | blurIterations | 模糊迭代次数 | 1-64 | 16 |
 | panning | 平移效果开关 | boolean | false |
