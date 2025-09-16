@@ -1,5 +1,11 @@
 # CHANGELOG | 变更日志
 
+## [1.0.6](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.5...1.0.6) (2025-09-16)
+
+### ✨ Features | 新功能
+
+* 添加背景图片自动加载功能 ([2cbe168](https://github.com/WuCheng-cn/AnyRainyDay/commit/2cbe16892fb39e49f9f1d3d68147d85c12d39304))
+
 ## [1.0.5](https://github.com/WuCheng-cn/AnyRainyDay/compare/1.0.4...1.0.5) (2025-09-15)
 
 ### 📝 Documentation | 文档变更
