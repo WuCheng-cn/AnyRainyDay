@@ -28,6 +28,7 @@ export class RainyWindow implements RainyWindowControls {
    * # 构造函数 🏗️
    * - 初始化雨滴窗口效果
    * - 自动设置场景、渲染器和材质
+   * - 如果提供了backgroundImage或未提供任何背景，则自动加载默认图片
    * @param container - HTML容器元素
    * @param options - 配置选项
    */
@@ -41,6 +42,31 @@ export class RainyWindow implements RainyWindowControls {
     this.initMesh()
     this.bindEvents()
     this.startRender()
+
+    // 自动加载背景图片
+    // 如果提供了backgroundImage，则加载指定图片
+    // 如果没有提供任何背景，则默认加载一张示例图片
+    if (options.backgroundImage) {
+      this.loadImage(options.backgroundImage).catch((error) => {
+        console.error('Failed to load background image:', error)
+        // 如果指定图片加载失败，尝试加载默认图片
+        this.loadDefaultBackground()
+      })
+    }
+    else {
+      // 默认加载示例图片
+      this.loadDefaultBackground()
+    }
+  }
+
+  /**
+   * # 加载默认背景图片 🖼️
+   * - 加载默认的示例图片作为背景
+   */
+  private loadDefaultBackground(): void {
+    this.loadImage('https://picsum.photos/1920/1080').catch((error) => {
+      console.error('Failed to load default background image:', error)
+    })
   }
 
   /** # 初始化3D场景 🎭 */

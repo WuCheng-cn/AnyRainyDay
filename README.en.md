@@ -29,6 +29,7 @@
 | lightning | Lightning effect toggle | boolean | false |
 | textureFill | Texture fill toggle | boolean | true |
 | fps | Frame rate setting | 15-120 | 30 |
+| backgroundImage | Background image URL | string | https://picsum.photos/1920/1080 |
 
 ## Installation 📦
 

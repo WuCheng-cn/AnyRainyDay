@@ -29,6 +29,7 @@
 | lightning | 闪电效果开关 | boolean | false |
 | textureFill | 纹理填充开关 | boolean | true |
 | fps | 帧率设置 | 15-120 | 30 |
+| backgroundImage | 背景图片URL | string | https://picsum.photos/1920/1080 |
 
 ## 安装 📦
 

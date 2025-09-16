@@ -28,6 +28,8 @@ export interface RainyWindowOptions {
   textureFill?: boolean
   /** # 帧率设置 🎬 范围 15-120 */
   fps?: number
+  /** # 背景图片URL 🖼️ */
+  backgroundImage?: string
 }
 
 export default RainyWindowOptions

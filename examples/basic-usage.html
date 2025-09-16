@@ -166,9 +166,8 @@
             }
         };
 
-        // 加载默认背景
-        rainyWindow.loadImage('https://picsum.photos/1920/1080')
-            .catch(err => console.error('默认图片加载失败:', err));
+        // 注意：从版本1.0.6开始，RainyWindow会自动加载默认背景图片
+        // 无需手动调用loadImage方法
     </script>
 </body>
 </html>
