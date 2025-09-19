@@ -98,8 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('rainy-container')
   
   // 创建雨滴效果
-  const rainy = new RainyWindow({
-    container: container,
+  const rainy = new RainyWindow(container,{
     intensity: 0.6,      // 中等强度
     speed: 1.0,          // 正常速度
     dropSize: 2.0,       // 中等大小
@@ -134,7 +133,6 @@ import { RainyWindow, RainyWindowOptions } from '@arayui/rainy-day'
 
 // 定义配置选项
 const options: RainyWindowOptions = {
-  container: document.getElementById('rainy-container') as HTMLElement,
   intensity: 0.6,
   speed: 1.0,
   dropSize: 2.0,
@@ -145,7 +143,7 @@ const options: RainyWindowOptions = {
 }
 
 // 创建雨滴效果
-const rainy = new RainyWindow(options)
+const rainy = new RainyWindow(container, options)
 
 // 添加类型安全的事件监听
 rainy.on('resize', (width: number, height: number) => {
@@ -387,7 +385,6 @@ const RainyBackground: React.FC<RainyBackgroundProps> = ({
     if (!containerRef.current) return
 
     const options: RainyWindowOptions = {
-      container: containerRef.current,
       intensity,
       speed,
       dropSize,
@@ -397,7 +394,7 @@ const RainyBackground: React.FC<RainyBackgroundProps> = ({
       autoResize: true
     }
 
-    rainyRef.current = new RainyWindow(options)
+    rainyRef.current = new RainyWindow(containerRef.current, options)
 
     return () => {
       if (rainyRef.current) {
@@ -463,7 +460,6 @@ onMounted(() => {
   if (!containerRef.value) return
 
   const options: RainyWindowOptions = {
-    container: containerRef.value,
     intensity: props.intensity,
     speed: props.speed,
     dropSize: props.dropSize,
@@ -473,7 +469,7 @@ onMounted(() => {
     autoResize: true
   }
 
-  rainy = new RainyWindow(options)
+  rainy = new RainyWindow(containerRef.value, options)
 })
 
 onUnmounted(() => {

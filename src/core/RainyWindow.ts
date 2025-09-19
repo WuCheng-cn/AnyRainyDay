@@ -106,7 +106,7 @@ export class RainyWindow implements RainyWindowControls {
       postProcessing = true,
       lightning = false,
       textureFill = true,
-      fps = 30,
+      fps = 60,
     } = options
 
     this.material = new THREE.ShaderMaterial({
@@ -187,6 +187,11 @@ export class RainyWindow implements RainyWindowControls {
     }
 
     this.animationId = requestAnimationFrame(this.render)
+  }
+
+  /** # 获取当前雨滴强度 💧 */
+  getCurrentIntensity(): number {
+    return this.material.uniforms.u_intensity.value
   }
 
   // 控制方法实现

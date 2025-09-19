@@ -76,11 +76,6 @@ function addRainDemo(): void {
     <div style="position: absolute; top: 10px; left: 10px; background: rgba(0, 0, 0, 0.7); color: white; padding: 6px 10px; border-radius: 6px; font-size: 12px; z-index: 10;">
       互动演示
     </div>
-    <div style="position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; gap: 5px; z-index: 10; justify-content: center;">
-      <button id="demo-intensity" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; backdrop-filter: blur(10px); font-size: 11px; transition: all 0.3s;">强度</button>
-      <button id="demo-color" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; backdrop-filter: blur(10px); font-size: 11px; transition: all 0.3s;">颜色</button>
-      <button id="demo-reset" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; backdrop-filter: blur(10px); font-size: 11px; transition: all 0.3s;">重置</button>
-    </div>
   `
 
   // 替换原来的 logo
@@ -143,8 +138,7 @@ function initRainDemo(): void {
   }
 
   // 创建雨滴效果实例
-  const rainy = new window.any.RainyWindow({
-    container,
+  const rainy = new window.any.RainyWindow(container, {
     intensity: 0.5,
     speed: 1.2,
     dropSize: 2.5,
@@ -152,34 +146,7 @@ function initRainDemo(): void {
     color: '#ffffff',
     interactive: true,
     autoResize: true,
-  })
-  rainy.loadImage('https://picsum.photos/1920/1080')
-
-  // 演示控制按钮
-  const colors = ['#ffffff', '#87ceeb', '#dda0dd', '#90ee90', '#ffcccb']
-  let colorIndex = 0
-
-  const intensityBtn = document.getElementById('demo-intensity')
-  const colorBtn = document.getElementById('demo-color')
-  const resetBtn = document.getElementById('demo-reset')
-
-  intensityBtn?.addEventListener('click', () => {
-    const intensities = [0.3, 0.5, 0.7, 0.9, 1.0]
-    const current = intensities.indexOf(rainy.getCurrentIntensity())
-    const next = (current + 1) % intensities.length
-    rainy.setIntensity(intensities[next])
-  })
-
-  colorBtn?.addEventListener('click', () => {
-    colorIndex = (colorIndex + 1) % colors.length
-    rainy.setColor(colors[colorIndex])
-  })
-
-  resetBtn?.addEventListener('click', () => {
-    rainy.setIntensity(0.5)
-    rainy.setSpeed(1.2)
-    rainy.setColor('#ffffff')
-    colorIndex = 0
+    fps: 60,
   })
 
   // 添加鼠标悬停效果
