@@ -34,7 +34,7 @@ export class RainyWindow implements RainyWindowControls {
    */
   constructor(e, t = {}) {
   this.container = e;
-  this.clock = new fa();
+  this.clock = new THREE.Clock();
 
   this.initScene();
   this.initRenderer();
@@ -279,8 +279,8 @@ export class RainyWindow implements RainyWindowControls {
    * - 自动播放并循环视频
    * @param url - 视频URL地址
    */
-  async loadVideo(url) {
-  return new Promise((resolve, reject) => {
+async loadVideo(url: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {3
     this.disposeVideo();
 
     const video = document.createElement("video");
@@ -294,7 +294,7 @@ export class RainyWindow implements RainyWindowControls {
 
     const onLoadedMetadata = async () => {
       try {
-        const texture = new sa(video);
+        const texture = new THREE.VideoTexture(video);
 
         this.material.uniforms.u_tex0.value = texture;
 
