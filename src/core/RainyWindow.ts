@@ -32,32 +32,23 @@ export class RainyWindow implements RainyWindowControls {
    * @param container - HTML容器元素
    * @param options - 配置选项
    */
-  constructor(container: HTMLElement, options: RainyWindowOptions = {}) {
-    this.container = container
-    this.clock = new THREE.Clock()
+  constructor(e, t = {}) {
+  this.container = e;
+  this.clock = new THREE.Clock();
 
-    this.initScene()
-    this.initRenderer()
-    this.initMaterial(options)
-    this.initMesh()
-    this.bindEvents()
-    this.startRender()
+  this.initScene();
+  this.initRenderer();
+  this.initMaterial(t);
+  this.initMesh();
+  this.bindEvents();
+  this.startRender();
 
-    // 自动加载背景图片
-    // 如果提供了backgroundImage，则加载指定图片
-    // 如果没有提供任何背景，则默认加载一张示例图片
-    if (options.backgroundImage) {
-      this.loadImage(options.backgroundImage).catch((error) => {
-        console.error('Failed to load background image:', error)
-        // 如果指定图片加载失败，尝试加载默认图片
-        this.loadDefaultBackground()
-      })
-    }
-    else {
-      // 默认加载示例图片
-      this.loadDefaultBackground()
-    }
+  if (t.backgroundImage) {
+    this.loadImage(t.backgroundImage).catch((n) => {
+      console.error("Failed to load background image:", n);
+    });
   }
+}
 
   /**
    * # 加载默认背景图片 🖼️
@@ -288,44 +279,75 @@ export class RainyWindow implements RainyWindowControls {
    * - 自动播放并循环视频
    * @param url - 视频URL地址
    */
-  async loadVideo(url: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.disposeVideo()
+async loadVideo(url: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {3
+    this.disposeVideo();
 
-      const video = document.createElement('video')
-      video.src = url
-      video.muted = true
-      video.loop = true
-      video.crossOrigin = 'anonymous'
+    const video = document.createElement("video");
 
-      video.addEventListener('loadedmetadata', () => {
-        const videoTexture = new THREE.VideoTexture(video)
-        this.material.uniforms.u_tex0.value = videoTexture
+    video.src = url;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.crossOrigin = "anonymous";
+    video.preload = "auto";
+
+    const onLoadedMetadata = async () => {
+      try {
+        const texture = new THREE.VideoTexture(video);
+
+        this.material.uniforms.u_tex0.value = texture;
+
         this.material.uniforms.u_tex0_resolution.value.set(
           video.videoWidth,
-          video.videoHeight,
-        )
-        resolve()
-      })
+          video.videoHeight
+        );
 
-      video.addEventListener('error', reject)
-      video.play().catch(reject)
-      this.videoElement = video
-    })
-  }
+        await video.play();
+
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    video.addEventListener(
+      "loadedmetadata",
+      onLoadedMetadata,
+      { once: true }
+    );
+
+    video.addEventListener(
+      "error",
+      reject,
+      { once: true }
+    );
+
+    this.videoElement = video;
+
+    video.load();
+  });
+}
 
   /** # 清理视频资源 🧹 */
-  private disposeVideo(): void {
-    if (this.videoElement) {
-      this.videoElement.pause()
-      this.videoElement.removeAttribute('src')
-      this.videoElement.load()
-      this.videoElement = undefined
-    }
-    if (this.material.uniforms.u_tex0.value) {
-      this.material.uniforms.u_tex0.value.dispose()
-    }
+  private disposeVideo() {
+  if (this.videoElement) {
+    const video = this.videoElement;
+
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+
+    this.videoElement = void 0;
   }
+
+  const texture = this.material.uniforms.u_tex0.value;
+
+  if (texture) {
+    texture.dispose();
+    this.material.uniforms.u_tex0.value = null;
+  }
+}
 
   /** # 暂停渲染 ⏸️ */
   pause(): void {
